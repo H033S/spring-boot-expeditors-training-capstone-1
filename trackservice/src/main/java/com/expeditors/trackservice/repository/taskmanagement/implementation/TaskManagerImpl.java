@@ -2,16 +2,24 @@ package com.expeditors.trackservice.repository.taskmanagement.implementation;
 
 import com.expeditors.trackservice.repository.taskmanagement.Task;
 import com.expeditors.trackservice.repository.taskmanagement.TaskManager;
+import com.expeditors.trackservice.repository.taskmanagement.TaskManagerRollbackException;
 import org.springframework.stereotype.Component;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-@Component
 public class TaskManagerImpl implements TaskManager {
 
-    private static final Queue<Task> taskToPerform = new ConcurrentLinkedDeque<>();
-    public static final Queue<Task> completedTasks = new ConcurrentLinkedDeque<>();
+    private final Queue<Task> taskToPerform;
+    private final Queue<Task> completedTasks;
+
+    public TaskManagerImpl(
+            Queue<Task> taskToPerform,
+            Queue<Task> completedTasks) {
+
+        this.taskToPerform = taskToPerform;
+        this.completedTasks = completedTasks;
+    }
 
     public boolean processTasks(){
         boolean isSuccessfuly = true;
@@ -23,9 +31,10 @@ public class TaskManagerImpl implements TaskManager {
             isSuccessfuly =  eTask.process();
 
             if(!isSuccessfuly){
-                taskToPerform.clear();
                 break;
             }
+
+            completedTasks.add(eTask);
         }
 
         if(isSuccessfuly){
@@ -40,7 +49,7 @@ public class TaskManagerImpl implements TaskManager {
             isSuccessfuly =  eTask.revert();
 
             if(!isSuccessfuly){
-                throw new RuntimeException("Not possible rollback");
+                throw new TaskManagerRollbackException("Not possible rollback");
             }
         }
         return false;

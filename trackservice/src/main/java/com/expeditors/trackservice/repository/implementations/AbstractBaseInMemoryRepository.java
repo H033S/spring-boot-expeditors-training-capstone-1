@@ -25,6 +25,9 @@ public abstract class AbstractBaseInMemoryRepository<TEntity extends Entity>
 
     @Override
     public boolean updateEntity(TEntity entity) {
+        if(Objects.isNull(entity)){
+            throw new IllegalArgumentException("Entity cannot be null");
+        }
 
         return entityList.computeIfPresent(entity.getId(),
                 (key, oldValue) -> entity) != null;
@@ -32,7 +35,7 @@ public abstract class AbstractBaseInMemoryRepository<TEntity extends Entity>
 
     @Override
     public boolean deleteEntity(int id) {
-        return entityList.remove(id) == null;
+        return entityList.remove(id) != null;
     }
 
     @Override

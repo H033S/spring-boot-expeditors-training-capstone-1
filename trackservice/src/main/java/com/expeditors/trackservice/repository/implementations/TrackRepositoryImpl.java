@@ -9,10 +9,9 @@ import com.expeditors.trackservice.repository.taskmanagement.implementation.task
 import com.expeditors.trackservice.repository.taskmanagement.implementation.tasks.track.DeleteTrackFromArtistTask;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Repository
 public class TrackRepositoryImpl
@@ -43,10 +42,9 @@ public class TrackRepositoryImpl
         }
 
         var oldTrack = oldTrackOpt.get();
-        var trackId = oldTrack.getId();
 
         for (Artist artist : oldTrack.getArtistList()) {
-            taskManager.addTask(new DeleteTrackFromArtistTask(artist,trackId));
+            taskManager.addTask(new DeleteTrackFromArtistTask(artist,oldTrack));
         }
         for (Artist artist : entity.getArtistList()) {
             taskManager.addTask(new AddTrackForArtistTask(artist,entity));
@@ -70,7 +68,7 @@ public class TrackRepositoryImpl
         }
 
         for (Artist artist : oldTrack.getArtistList()) {
-            taskManager.addTask(new DeleteTrackFromArtistTask(artist, oldTrack.getId()));
+            taskManager.addTask(new DeleteTrackFromArtistTask(artist, oldTrack));
         }
 
         return taskManager.processTasks();
@@ -109,12 +107,10 @@ public class TrackRepositoryImpl
     }
 
     @Override
-    public List<Track> getTracksByArtist(int artistId) {
-        return getTracksByPredicate(t ->
-            t.getArtistList()
-                    .stream()
-                    .anyMatch(a -> a.getId() == artistId)
-        );
+    public List<Artist> getArtistsByTrack(int trackId) {
+        return getEntityById(trackId)
+                .map( t -> t.getArtistList().stream().toList())
+                .orElse(new ArrayList<>());
     }
 
     @Override

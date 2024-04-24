@@ -9,31 +9,21 @@ import java.util.Optional;
 public class DeleteTrackFromArtistTask implements Task {
 
     private final Artist artist;
-    private final int trackId;
-    private Optional<Track> trackRemoved;
+    private Track track;
 
-    public DeleteTrackFromArtistTask(Artist artist, int trackId) {
+    public DeleteTrackFromArtistTask(Artist artist, Track track) {
         this.artist = artist;
-        this.trackId = trackId;
+        this.track = track;
     }
 
     @Override
     public boolean process() {
-        trackRemoved = artist.getTrackList()
-                .stream()
-                .filter(t -> t.getId() == trackId)
-                .findAny();
-
-        if(trackRemoved.isEmpty()) return false;
-        return artist.getTrackList().removeIf(t -> t.getId() == trackId);
+        return artist.getTrackList().removeIf(t -> t.getId() == track.getId());
     }
 
     @Override
     public boolean revert() {
 
-        if(trackRemoved.isEmpty()){
-            return false;
-        }
-        return artist.getTrackList().add(trackRemoved.get());
+        return artist.getTrackList().add(track);
     }
 }

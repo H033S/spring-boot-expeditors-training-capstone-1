@@ -1,5 +1,6 @@
 package com.expeditors.trackservice.service.implementations;
 
+import com.expeditors.trackservice.domain.Artist;
 import com.expeditors.trackservice.domain.MediaType;
 import com.expeditors.trackservice.domain.Track;
 import com.expeditors.trackservice.repository.TrackRepository;
@@ -8,6 +9,7 @@ import com.expeditors.trackservice.service.TrackService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class TrackServiceImpl
@@ -32,8 +34,8 @@ public class TrackServiceImpl
     }
 
     @Override
-    public List<Track> getTracksByArtist(int artistId) {
-        return repository.getTracksByArtist(artistId);
+    public List<Artist> getArtistByTracks(int trackId) {
+        return repository.getArtistsByTrack(trackId);
     }
 
     @Override

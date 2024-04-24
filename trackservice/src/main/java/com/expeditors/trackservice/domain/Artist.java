@@ -1,12 +1,13 @@
 package com.expeditors.trackservice.domain;
 
-import com.expeditors.trackservice.domain.Entity;
-import com.expeditors.trackservice.domain.Track;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -17,14 +18,15 @@ public class Artist extends Entity {
 
     private String firstName;
     private String lastName;
-    List<Track> trackList;
+    private Set<Track> trackList;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Artist artist = (Artist) o;
-        return  Objects.equals(firstName, artist.firstName) &&
+        return  Objects.equals(getId(), artist.getId()) &&
+                Objects.equals(firstName, artist.firstName) &&
                 Objects.equals(lastName, artist.lastName);
     }
 

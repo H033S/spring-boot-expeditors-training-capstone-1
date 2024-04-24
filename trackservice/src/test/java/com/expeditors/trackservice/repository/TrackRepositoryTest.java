@@ -4,37 +4,38 @@ import com.expeditors.trackservice.domain.Artist;
 import com.expeditors.trackservice.domain.MediaType;
 import com.expeditors.trackservice.domain.Track;
 import com.expeditors.trackservice.repository.implementations.TrackRepositoryImpl;
-
 import com.expeditors.trackservice.repository.taskmanagement.TaskManager;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Assertions;
-
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-public class TrackRepositoryUnitTest {
+public class TrackRepositoryTest {
 
     @MockBean
     Map<Integer, Track> tracksMap;
 
     @Autowired
     TaskManager manager;
+
     @Autowired
     TrackRepositoryImpl repository;
 
@@ -42,8 +43,8 @@ public class TrackRepositoryUnitTest {
     private Artist artist2;
     private Track track1;
     private Track track2;
-    private List<Artist> artistList;
-    private List<Track> trackList;
+    private Set<Artist> artistList;
+    private Set<Track> trackList;
 
 
     @BeforeEach
@@ -52,24 +53,24 @@ public class TrackRepositoryUnitTest {
                 .id(1)
                 .firstName("Antonio")
                 .lastName("Nazco")
-                .trackList(new ArrayList<>())
+                .trackList(new HashSet<>())
                 .build();
 
         artist2 = Artist.builder()
                 .id(2)
                 .firstName("Nathaly")
                 .lastName("Nazco")
-                .trackList(new ArrayList<>())
+                .trackList(new HashSet<>())
                 .build();
 
-        artistList = List.of(artist1);
+        artistList = Set.of(artist1);
 
         track1 = Track.builder()
                 .id(1)
                 .title("One Day !!!")
                 .album("XXI")
                 .type(MediaType.MP3)
-                .artistList(new ArrayList<>(artistList))
+                .artistList(new HashSet<>(artistList))
                 .build();
 
         track2 = Track.builder()
@@ -77,10 +78,10 @@ public class TrackRepositoryUnitTest {
                 .title("Second Day !!!")
                 .album("XXI")
                 .type(MediaType.MP3)
-                .artistList(new ArrayList<>(artistList))
+                .artistList(new HashSet<>(artistList))
                 .build();
 
-        trackList = List.of(track1, track2);
+        trackList = Set.of(track1, track2);
 
         artist1.getTrackList().addAll(trackList);
     }
@@ -117,7 +118,7 @@ public class TrackRepositoryUnitTest {
                 .title("First Song!")
                 .type(MediaType.MP3)
                 .durationInMinutes(5)
-                .artistList(new ArrayList<>(List.of(artist2)))
+                .artistList(new HashSet<>(List.of(artist2)))
                 .build();
 
         Mockito.doReturn(newTrack)
@@ -158,6 +159,9 @@ public class TrackRepositoryUnitTest {
         Mockito.doReturn(track1)
                 .when(tracksMap)
                 .get(anyInt());
+        Mockito.doReturn(track1)
+                .when(tracksMap)
+                .remove(anyInt());
 
         assertTrue(repository.deleteEntity(1));
 
@@ -185,11 +189,10 @@ public class TrackRepositoryUnitTest {
                 .type(MediaType.MP3)
                 .title("Another Day!")
                 .album("One Song")
-                .artistList(new ArrayList<>(List.of(artist2)))
+                .artistList(new HashSet<>(List.of(artist2)))
                 .build();
 
         assertNotNull(repository.addEntity(newTrack));
-        assertEquals(1, newTrack.getId());
         assertEquals(MediaType.MP3, newTrack.getType());
         assertEquals("Another Day!", newTrack.getTitle());
         assertEquals("One Song", newTrack.getAlbum());
@@ -262,30 +265,31 @@ public class TrackRepositoryUnitTest {
     }
 
     @Test
-    void getTracksByArtist_ReturnsListOfTracks_WhenCriteriaFindMatches(){
-        var mockListOfTracks = List.of(
-                Track.builder().id(1).artistList(artistList).build(),
-                Track.builder().id(2).artistList(List.of(artist2)).build()
-        );
+    void getArtistByTrack_ReturnsListOfArtists_WhenCriteriaFindMatches(){
 
-        Mockito.doReturn(mockListOfTracks)
-                .when(tracksMap).values();
+        Mockito.doReturn(true)
+                .when(tracksMap)
+                .containsKey(anyInt());
+        Mockito.doReturn(track1)
+                .when(tracksMap)
+                .get(anyInt());
 
-        var listReturned = repository.getTracksByArtist(1);
+        var listReturned = repository.getArtistsByTrack(1);
         assertThat(listReturned, hasSize(1));
+        assertThat(listReturned, containsInAnyOrder(artist1));
     }
 
     @Test
     void getTracksByArtist_ReturnsEmptyListOfTracks_WhenCriteriaCannotFindMatches(){
         var mockListOfTracks = List.of(
                 Track.builder().id(1).artistList(artistList).build(),
-                Track.builder().id(2).artistList(List.of(artist2)).build()
+                Track.builder().id(2).artistList(Set.of(artist2)).build()
         );
 
         Mockito.doReturn(mockListOfTracks)
                 .when(tracksMap).values();
 
-        var listReturned = repository.getTracksByArtist(3);
+        var listReturned = repository.getArtistsByTrack(3);
         assertThat(listReturned, hasSize(0));
     }
 

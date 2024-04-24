@@ -1,26 +1,26 @@
-package com.expeditors.trackservice.repository.taskmanagement.implementation.tasks.track;
+package com.expeditors.trackservice.repository.taskmanagement.implementation.tasks.artist;
 
 import com.expeditors.trackservice.domain.Artist;
 import com.expeditors.trackservice.domain.Track;
 import com.expeditors.trackservice.repository.taskmanagement.Task;
 
-public class AddTrackForArtistTask implements Task {
+public class DeleteArtistFromTrackTask implements Task {
 
     private final Artist artist;
     private final Track track;
 
-    public AddTrackForArtistTask(Artist artist, Track track) {
+    public DeleteArtistFromTrackTask(Artist artist, Track track) {
         this.artist = artist;
         this.track = track;
     }
 
     @Override
     public boolean process() {
-        return artist.getTrackList().add(track);
+        return track.getArtistList().removeIf(a -> a.getId() == track.getId());
     }
 
     @Override
     public boolean revert() {
-        return artist.getTrackList().removeIf(t -> t.getId() == track.getId());
+        return track.getArtistList().add(artist);
     }
 }
