@@ -10,4 +10,5 @@ public interface ArtistService extends BaseService<Artist>{
 
     List<Artist> getArtistByName(String firstName);
     List<Track> getTracksByArtistId(int id);
+    ArtistByIdsReturn getArtistsById(List<Integer> idList);
 }

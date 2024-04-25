@@ -16,7 +16,7 @@ public class DeleteArtistFromTrackTask implements Task {
 
     @Override
     public boolean process() {
-        return track.getArtistList().removeIf(a -> a.getId() == track.getId());
+        return track.getArtistList().removeIf(a -> a.getId() == artist.getId());
     }
 
     @Override

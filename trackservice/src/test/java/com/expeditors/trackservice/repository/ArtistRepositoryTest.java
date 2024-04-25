@@ -4,15 +4,14 @@ import com.expeditors.trackservice.domain.Artist;
 import com.expeditors.trackservice.domain.MediaType;
 import com.expeditors.trackservice.domain.Track;
 import com.expeditors.trackservice.repository.taskmanagement.TaskManager;
-import javafx.beans.binding.When;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -163,6 +162,41 @@ public class ArtistRepositoryTest {
                 .remove(anyInt());
 
         assertTrue(artistRepository.deleteEntity(1));
+        assertThat(track.getArtistList(), hasSize(0));
+    }
+
+    @Test
+    void deleteEntity_ShouldRunSuccessful_(){
+        var artist = Artist.builder()
+                .firstName("F2")
+                .lastName("L2")
+                .trackList(new HashSet<>())
+                .build();
+
+        var track = Track.builder()
+                .id(7)
+                .durationInMinutes(2.0)
+                .title("T1")
+                .album("A1")
+                .issueDate(LocalDate.now())
+                .type(MediaType.WAV)
+                .artistList(new HashSet<>())
+                .build();
+
+        artist.getTrackList().add(track);
+        track.getArtistList().add(artist);
+
+        Mockito.doReturn(true)
+                .when(artistMap)
+                .containsKey(anyInt());
+        Mockito.doReturn(artist)
+                .when(artistMap)
+                .get(anyInt());
+        Mockito.doReturn(track)
+                .when(artistMap)
+                .remove(anyInt());
+
+        assertTrue(artistRepository.deleteEntity(7));
         assertThat(track.getArtistList(), hasSize(0));
     }
 

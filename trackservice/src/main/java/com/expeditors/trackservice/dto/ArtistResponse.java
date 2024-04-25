@@ -22,7 +22,7 @@ public class ArtistResponse {
     private String lastName;
 
     @JsonAlias("tracks")
-    private List<TrackResponseForArtist> trackResponseList;
+    private List<TrackResponseForArtist> trackList;
 
 
     @Builder
@@ -68,7 +68,7 @@ public class ArtistResponse {
                 .id(artist.getId())
                 .firstName(artist.getFirstName())
                 .lastName(artist.getLastName())
-                .trackResponseList(tracksList)
+                .trackList(tracksList)
                 .build();
 
     }

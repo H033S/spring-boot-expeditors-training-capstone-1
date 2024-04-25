@@ -22,12 +22,10 @@ public class TrackResponse {
     private double price;
     private String title;
     private String album;
+    private MediaType type;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate issueDate;
-
-    private MediaType type;
-
     @JsonAlias("artists")
     private List<ArtistResponseForTrack> artistList;
 
