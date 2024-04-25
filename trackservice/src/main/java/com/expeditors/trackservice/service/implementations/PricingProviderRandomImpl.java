@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-@Component
+
 public class PricingProviderRandomImpl
         implements PricingProvider {
 

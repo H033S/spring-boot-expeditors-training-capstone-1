@@ -2,36 +2,29 @@ package com.expeditors.trackservice.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.net.URI;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-@AutoConfigureMockMvc
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PricingProviderTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
     private static final String PRICING_URL = "http://localhost:10002/pricing";
+    @Autowired
+    private TestRestTemplate testRestTemplate;
 
     @Test
     public void testGetAll() throws Exception {
-        var actions = mockMvc.perform(get(PRICING_URL)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-        );
 
-        var expect = actions.andExpect(status().isOk());
-        var result = expect.andReturn();
+        var response = testRestTemplate.getForEntity(
+                URI.create(PRICING_URL), Double.class);
 
-        var jsonResult = result.getResponse().getContentAsString();
-
-        System.out.println(STR."jsonResult: \{jsonResult}");
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertNotNull(response.getBody());
     }
 }

@@ -2,10 +2,12 @@ package com.expeditors.trackservice.service.implementations;
 
 import com.expeditors.trackservice.service.PricingProvider;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
 import java.util.Objects;
 
+@Component
 public class PricingProviderClient implements PricingProvider {
 
     private static final String PRICING_URL = "http://localhost:10002/pricing";
