@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cglib.core.Local;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -26,6 +27,7 @@ public class TrackserviceApplication {
 }
 
 @Component
+@Profile("!test")
 class Runner implements CommandLineRunner{
 
     private final TrackService trackService;

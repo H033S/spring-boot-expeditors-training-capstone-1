@@ -8,14 +8,17 @@
         <version>3.2.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>com.expeditors</groupId>
     <artifactId>trackservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>trackservice</name>
     <description>trackservice</description>
+
     <properties>
         <java.version>21</java.version>
     </properties>
+
     <dependencies>
 
         <dependency>
@@ -39,6 +42,13 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+        <groupId>org.wiremock</groupId>
+        <artifactId>wiremock</artifactId>
+        <version>3.2.0</version>
+        <scope>test</scope>
+    </dependency>
 
     </dependencies>
 
