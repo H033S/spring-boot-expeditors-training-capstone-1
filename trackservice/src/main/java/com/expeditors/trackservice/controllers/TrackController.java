@@ -83,7 +83,7 @@ public class TrackController {
     }
 
     @GetMapping("/{trackId}/artists")
-    public ResponseEntity<?> getTrackByArtistId(
+    public ResponseEntity<?> getArtistByTrackId(
             @PathVariable int trackId){
 
         return ResponseEntity
@@ -155,7 +155,7 @@ public class TrackController {
         }
 
         var trackCreated = trackService.addEntity(
-                trackRequest.toTrack(result.artistList(), pricingProvider.getPrice()));
+                trackRequest.toTrack(result.artistList()));
         return ResponseEntity
                 .ok()
                 .body(TrackResponse.fromTrack(trackCreated, pricingProvider.getPrice()));
@@ -182,7 +182,7 @@ public class TrackController {
                     );
         }
 
-        var trackToUpdate = trackRequest.toTrack(artistByIdsResult.artistList(), pricingProvider.getPrice());
+        var trackToUpdate = trackRequest.toTrack(artistByIdsResult.artistList());
         trackToUpdate.setId(trackId);
 
         var isTrackUpdated = trackService.updateEntity(trackToUpdate);
