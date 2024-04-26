@@ -3,7 +3,6 @@ package com.expeditors.trackservice.dto;
 import com.expeditors.trackservice.domain.Artist;
 import com.expeditors.trackservice.domain.MediaType;
 import com.expeditors.trackservice.domain.Track;
-import com.expeditors.trackservice.service.ArtistService;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -26,8 +25,7 @@ public class TrackRequest {
 
 
     public Track toTrack(
-            Set<Artist> artistList,
-            double price) {
+            Set<Artist> artistList) {
 
         return Track.builder()
                 .title(title)

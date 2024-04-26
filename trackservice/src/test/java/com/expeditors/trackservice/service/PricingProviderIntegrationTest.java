@@ -12,14 +12,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PricingProviderTest {
+public class PricingProviderIntegrationTest {
 
     private static final String PRICING_URL = "http://localhost:10002/pricing";
+
     @Autowired
     private TestRestTemplate testRestTemplate;
 
     @Test
-    public void testGetAll() throws Exception {
+    public void testGetAll() {
 
         var response = testRestTemplate.getForEntity(
                 URI.create(PRICING_URL), Double.class);

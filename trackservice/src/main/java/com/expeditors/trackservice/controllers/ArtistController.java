@@ -1,13 +1,11 @@
 package com.expeditors.trackservice.controllers;
 
-import com.expeditors.trackservice.domain.Artist;
 import com.expeditors.trackservice.dto.ArtistRequest;
 import com.expeditors.trackservice.dto.ArtistResponse;
 import com.expeditors.trackservice.dto.TrackResponse;
 import com.expeditors.trackservice.service.ArtistService;
 import com.expeditors.trackservice.service.PricingProvider;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +48,7 @@ public class ArtistController {
     }
 
     @GetMapping("/by/name/{artistName}")
-    public ResponseEntity<?> getArtistById(
+    public ResponseEntity<?> getArtistByName(
             @PathVariable String artistName){
 
         return ResponseEntity
