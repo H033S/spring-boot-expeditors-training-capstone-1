@@ -11,5 +11,5 @@ import java.util.List;
 @Setter
 public class ErrorResponse {
     private String message;
-    private List<?> errors;
+    private List<String> errors;
 }

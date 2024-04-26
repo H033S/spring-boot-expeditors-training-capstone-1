@@ -24,6 +24,7 @@ public class TrackserviceApplication {
         SpringApplication.run(TrackserviceApplication.class, args);
     }
 
+
 }
 
 @Component

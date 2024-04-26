@@ -149,7 +149,7 @@ public class TrackController {
                    .badRequest()
                    .body(ErrorResponse.builder()
                            .message("Id(s) Cannot be Found")
-                           .errors(result.idOfMissingArtist().stream().toList())
+                           .errors(result.idOfMissingArtist().stream().map(String::valueOf).toList())
                            .build()
                    );
         }
@@ -177,7 +177,7 @@ public class TrackController {
                     .badRequest()
                     .body(ErrorResponse.builder()
                             .message("Id(s) Cannot be Found")
-                            .errors(artistByIdsResult.idOfMissingArtist().stream().toList())
+                            .errors(artistByIdsResult.idOfMissingArtist().stream().map(String::valueOf).toList())
                             .build()
                     );
         }
